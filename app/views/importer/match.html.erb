@@ -10,7 +10,7 @@
 	<% end %>
 </fieldset>
 -->
-<% form_tag({:action => 'result'}, {:multipart => true}) do %>
+<%= form_tag({:action => 'result'}, {:multipart => true}) do %>
 	<%= hidden_field_tag 'project_id', @project.id %>
 	<%= hidden_field_tag 'import_timestamp', @import_timestamp %>
 	<fieldset class="box"><legend><%= l(:label_match_select) %></legend>
