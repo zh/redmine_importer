@@ -8,7 +8,7 @@ ja:
   label_upload_wrapper: "引用文字："
   
   label_load_rules: "保存されたルールを読み込む"
-  label_toplines: "{{value}}の上の行を参考："
+  label_toplines: "%{value}の上の行を参考："
   label_match_columns: "コラムの対象のフィールド"
   label_match_select: "コラム毎の対象のフィールドを選択："
   label_import_rule: "インポートのルール"
@@ -24,10 +24,10 @@ ja:
   label_rule_name: "ルール舞を入れる："
   
   label_import_result: "インポートの結果"
-  label_result_notice: "{{handle_count}}行整理された。{{success_count}}行がうまく行った。"
+  label_result_notice: "%{handle_count}行整理された。%{success_count}行がうまく行った。"
   label_result_projects: "関われるプロジェクト："
-  label_result_issues: "{{count}}行"
-  label_result_failed: "{{count}}行が失敗："
+  label_result_issues: "%{count}行"
+  label_result_failed: "%{count}行が失敗："
   
   option_ignore: "無視"
   
@@ -36,5 +36,5 @@ ja:
   button_save_rules_and_submit: "マッチルールを保存して確認"
 
   text_rmi_specify_unique_field_for_update: "存在があるチケットの更新を選択されたので一意な値がある欄を選択が必要です。"
-  text_rmi_specify_unique_field_for_column: "「{{column}}」という連携があるコラムをインポートしているので一意な値がある欄を選択が必要です。" 
+  text_rmi_specify_unique_field_for_column: "「%{column}」という連携があるコラムをインポートしているので一意な値がある欄を選択が必要です。" 
 

@@ -2,6 +2,18 @@
     <%= stylesheet_link_tag 'importer', :plugin => 'redmine_importer' %>
 <% end %>
 
+<% content_for :update_issue_javascript do %>
+<script type='text/javascript'>
+  $(function() {
+    $('#update_issue').change(function() {
+      $('#journal_field').attr('disabled', !this.checked) 
+      $('#update_other_project').attr('disabled', !this.checked) 
+      $('#ignore_non_exist').attr('disabled', !this.checked) 
+    }).change();
+  })
+</script>
+<% end %>
+
 <h2><%= l(:label_match_columns) %></h2>
 <!--
 <fieldset class="box"><legend><%= l(:label_load_rules) %></legend>
@@ -19,7 +31,7 @@
 	        @attrs.each do |k,v| if v.to_s.casecmp(column.to_s.sub(" ") {|sp| "_" }) == 0 or k.to_s.casecmp(column.to_s) == 0 then matched = v end end
 	        %>
 		 <label class="tabular"><%= column %>:
-		 <%= select_tag "fields_map[#{column}]", "<option value=\"\">#{l(:option_ignore)}</option>" + 
+		 <%= select_tag "fields_map[#{column}]", raw("<option value=\"\">#{l(:option_ignore)}</option>") + 
 				options_for_select( @attrs, matched ) %></label>
 	<% end %>
 	</fieldset>
@@ -29,7 +41,7 @@
 		<%= select_tag "default_tracker", options_from_collection_for_select(@project.trackers, 'id', 'name') %></label><br/>
 		
 		<label><%= l(:label_unique_field) %>
-		<%= select_tag "unique_field", "<option value=\"\">#{l(:option_ignore)}</option>" +
+		<%= select_tag "unique_field", raw("<option value=\"\">#{l(:option_ignore)}</option>") +
       options_for_select(@headers) %></label><br/>
 
     <label><%= check_box_tag "send_emails", true, true %> <%= l(:label_importer_send_emails) %> </label><br/>
@@ -37,16 +49,9 @@
     <label><%= check_box_tag "add_versions", true, true %> <%= l(:label_importer_add_versions) %> </label><br/>		
 		<label><%= check_box_tag "update_issue", true, false %> <%= l(:label_update_issue) %>
 		</label><br/>
-		<%= observe_field("update_issue", :function => <<END_OF_STRING
-document.getElementById("journal_field").disabled = !element.checked;
-document.getElementById("update_other_project").disabled = !element.checked;
-document.getElementById("ignore_non_exist").disabled = !element.checked;
-END_OF_STRING
-)
-		%>
-		
+		<%= yield :update_issue_javascript %>
 		&nbsp;&nbsp;&nbsp;&nbsp;<label><%= l(:label_journal_field) %>
-		<%= select_tag "journal_field", "<option value=\"\">#{l(:option_ignore)}</option>" + options_for_select(@headers), {:disabled => true} %></label><br/>
+		<%= select_tag "journal_field", raw("<option value=\"\">#{l(:option_ignore)}</option>") + options_for_select(@headers), {:disabled => true} %></label><br/>
 		
 		&nbsp;&nbsp;&nbsp;&nbsp;<label><%= check_box_tag "update_other_project", true, false, {:disabled => true} %>
 		<%= l(:label_update_other_project) %></label><br/>
