@@ -8,11 +8,11 @@ The plugin has been testes on Redmine 1.1 and Redmine 1.2.0.
 The database is used for intermediate storage.
 
 To install:
-- Prerequisites: Unless you are using ruby-1.9, you'll need the fastercsv gem ('gem install fastercsv' as root).
+- Prerequisites: Unless you are using ruby-1.9, you'll need the fastercsv gem (<code>gem install fastercsv</code> as root).
   Versions 1.4 through 1.5.3 are tested.
 - Download the plugin to your 'plugins/' directory.  Be sure to maintain the correct folder name, 'redmine_importer'.
-- Run 'rake redmine:plugins:migrate RAILS_ENV=production'
-- Restart your redmine as appropriate (e.g., 'ruby script/rails server -e production')
+- Run <code>rake redmine:plugins:migrate RAILS_ENV=production</code>
+- Restart your redmine as appropriate (e.g., <code>ruby script/rails server -e production</code>)
 - Go to the Admin/Projects/../Modules
 - Enable "Importer"
 
