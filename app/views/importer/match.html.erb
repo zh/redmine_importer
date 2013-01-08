@@ -79,7 +79,10 @@
 	<tbody>
 	<% @samples.each do |issue| -%>
 	<tr class="<%= cycle("odd", "even") %>">
-	    <% issue.each do |column| %><%= content_tag 'td', column[1] %><% end %>
+            <% issue.each do |column| %>
+               <% column[1] = column[1].unpack('U*').pack('U*') if column[1].kind_of?(String) %>
+               <%= content_tag 'td', column[1] %>
+            <% end %>
 	</tr>
 	<% end %>
 	<tr class="<%= cycle("odd", "even") %>">
