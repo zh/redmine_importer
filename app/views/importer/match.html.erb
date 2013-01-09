@@ -30,8 +30,8 @@
 	     <% matched = ''
 	        @attrs.each do |k,v| if v.to_s.casecmp(column.to_s.sub(" ") {|sp| "_" }) == 0 or k.to_s.casecmp(column.to_s) == 0 then matched = v end end
 	        %>
-		 <label class="tabular"><%= column %>:
-		 <%= select_tag "fields_map[#{column}]", raw("<option value=\"\">#{l(:option_ignore)}</option>") + 
+		 <label class="tabular"><%= column.unpack('U*').pack('U*') %>:
+       <%= select_tag "fields_map[#{column.unpack('U*').pack('U*')}]", raw("<option value=\"\">#{l(:option_ignore)}</option>") + 
 				options_for_select( @attrs, matched ) %></label>
 	<% end %>
 	</fieldset>
@@ -42,7 +42,7 @@
 		
 		<label><%= l(:label_unique_field) %>
 		<%= select_tag "unique_field", raw("<option value=\"\">#{l(:option_ignore)}</option>") +
-      options_for_select(@headers) %></label><br/>
+      options_for_select(@headers.map{|header| header.unpack('U*').pack('U*')}) %></label><br/>
 
     <label><%= check_box_tag "send_emails", true, true %> <%= l(:label_importer_send_emails) %> </label><br/>
     <label><%= check_box_tag "add_categories", true, true %> <%= l(:label_importer_add_categories) %> </label><br/>		
@@ -51,7 +51,7 @@
 		</label><br/>
 		<%= yield :update_issue_javascript %>
 		&nbsp;&nbsp;&nbsp;&nbsp;<label><%= l(:label_journal_field) %>
-		<%= select_tag "journal_field", raw("<option value=\"\">#{l(:option_ignore)}</option>") + options_for_select(@headers), {:disabled => true} %></label><br/>
+      <%= select_tag "journal_field", raw("<option value=\"\">#{l(:option_ignore)}</option>") + options_for_select(@headers.map{|header| header.unpack('U*').pack('U*')}), {:disabled => true} %></label><br/>
 		
 		&nbsp;&nbsp;&nbsp;&nbsp;<label><%= check_box_tag "update_other_project", true, false, {:disabled => true} %>
 		<%= l(:label_update_other_project) %></label><br/>
@@ -73,7 +73,7 @@
 <table class="list">
     <thead><tr>
         <% @headers.each do |column| %>
-          <th><%= column %></th>
+          <th><%= column.unpack('U*').pack('U*') %></th>
         <% end %>
 	</tr></thead>
 	<tbody>
