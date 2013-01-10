@@ -226,6 +226,8 @@ class ImporterController < ApplicationController
       end
 
       begin
+        row.each{|k,v| row[k] = v.unpack('U*').pack('U*') if v.kind_of?(String)}
+        
         tracker = Tracker.find_by_name(row[attrs_map["tracker"]])
         status = IssueStatus.find_by_name(row[attrs_map["status"]])
         author = attrs_map["author"] ? user_for_login!(row[attrs_map["author"]]) : User.current
