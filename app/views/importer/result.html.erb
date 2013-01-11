@@ -23,7 +23,11 @@
 	<% @failed_issues.each do |id, issue| -%>
 	<tr class="<%= cycle("odd", "even") %>">
 		<td><%= id %></td>
-	    <% issue.each do |column| %><%= content_tag 'td', column[1] %><% end %>
+	    <% issue.each do |column| %>
+      <%- data = column[1] %>
+      <%- data = data.unpack('U*').pack('U*') if data.is_a?(String) -%>
+        <%= content_tag 'td', data %>
+      <% end %>
 	</tr>
 	<% end %>
 	</tbody>
