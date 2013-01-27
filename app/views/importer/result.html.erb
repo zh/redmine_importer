@@ -16,7 +16,7 @@
     <thead><tr>
     	<th>#</th>
         <% @headers.each do |column| %>
-          <th><%= column %></th>
+          <th><%= column.unpack('U*').pack('U*')  %></th>
         <% end %>
 	</tr></thead>
 	<tbody>
@@ -24,7 +24,7 @@
 	<tr class="<%= cycle("odd", "even") %>">
 		<td><%= id %></td>
 	    <% issue.each do |column| %>
-      <%- data = column[1] %>
+      <%- data = column[1] -%>
       <%- data = data.unpack('U*').pack('U*') if data.is_a?(String) -%>
         <%= content_tag 'td', data %>
       <% end %>
