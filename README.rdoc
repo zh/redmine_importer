@@ -4,7 +4,7 @@ User documentation for this plugin is
 at https://github.com/leovitch/redmine_importer/wiki.
 
 This plugin is functional now, including in multiprocess environments.
-The plugin has been testes on Redmine 1.1 and Redmine 1.2.0.
+The plugin has been testes on Redmine 1.1, 1.2.0 and 2.2-stable.
 The database is used for intermediate storage.
 
 To install:
@@ -16,7 +16,7 @@ To install:
 - Go to the Admin/Projects/../Modules
 - Enable "Importer"
 
-en, de, zh, pt-BR, and ja localizations included.
+en, de, zh, pt-BR, ru and ja localizations included.
 The other localizations are up to date, but the zh is a little bit behind.
 If anyone could update it, it would be appreciated.
 
