@@ -185,7 +185,8 @@ class ImporterController < ApplicationController
     journal_field = params[:journal_field]
     update_other_project = params[:update_other_project]
     ignore_non_exist = params[:ignore_non_exist]
-    fields_map = params[:fields_map]
+    fields_map = {}
+    params[:fields_map].each { |k, v| fields_map[k.unpack('U*').pack('U*')] = v }
     send_emails = params[:send_emails]
     add_categories = params[:add_categories]
     add_versions = params[:add_versions]
@@ -226,8 +227,13 @@ class ImporterController < ApplicationController
       end
 
       begin
-        row.each{|k,v| row[k] = v.unpack('U*').pack('U*') if v.kind_of?(String)}
-        
+        row.each do |k, v|
+          k = k.unpack('U*').pack('U*') if k.kind_of?(String)
+          v = v.unpack('U*').pack('U*') if v.kind_of?(String)
+
+          row[k] = v
+        end
+
         tracker = Tracker.find_by_name(row[attrs_map["tracker"]])
         status = IssueStatus.find_by_name(row[attrs_map["status"]])
         author = attrs_map["author"] ? user_for_login!(row[attrs_map["author"]]) : User.current
