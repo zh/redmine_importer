@@ -88,8 +88,8 @@ class ImporterController < ApplicationController
     end
     if unique_attr == "id"
       issues = [Issue.find_by_id(attr_value)]
-      else
-      query = Query.new(:name => "_importer", :project => @project)
+    else
+      query = IssueQuery.new(:name => "_importer", :project => @project)
       query.add_filter("status_id", "*", [1])
       query.add_filter(unique_attr, "=", [attr_value])
       
