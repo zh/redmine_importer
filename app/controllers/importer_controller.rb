@@ -86,10 +86,20 @@ class ImporterController < ApplicationController
     if @issue_by_unique_attr.has_key?(attr_value)
       return @issue_by_unique_attr[attr_value]
     end
+
     if unique_attr == "id"
       issues = [Issue.find_by_id(attr_value)]
     else
-      query = IssueQuery.new(:name => "_importer", :project => @project)
+      # Use IssueQuery class Redmine >= 2.3.0
+      begin
+        if Module.const_get('IssueQuery') && IssueQuery.is_a?(Class)
+          query_class = IssueQuery
+        end
+      rescue NameError
+        query_class = Query
+      end
+
+      query = query_class.new(:name => "_importer", :project => @project)
       query.add_filter("status_id", "*", [1])
       query.add_filter(unique_attr, "=", [attr_value])
       
