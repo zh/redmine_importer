@@ -18,7 +18,7 @@ ja:
   label_importer_send_emails: "メールを送信する"
   label_importer_add_categories: "新しいカテゴリを自動的に追加"
   label_importer_add_versions: "新しい対象バージョンを自動的に追加"
-  label_unique_field: "一意な値がある列を選択(存在する更新または関連するチケットをインポートする際に必須):"
+  label_unique_field: "ユニークフィールドを選択(存在するチケットを更新する場合や、関連するチケットをインポートする場合に必須):"
   label_update_other_project: "他のプロジェクトのチケットでも更新"
   label_ignore_non_exist: "チケットが存在しない場合は無視"
   label_rule_name: "ルール名を入力:"
@@ -35,5 +35,5 @@ ja:
   button_submit: "確認"
   button_save_rules_and_submit: "対応ルールを保存して確認"
 
-  text_rmi_specify_unique_field_for_update: "存在するチケットを更新する場合、一意な値がある列を選択する必要があります。"
-  text_rmi_specify_unique_field_for_column: "「%{column}」という関連するチケットがあるコラムをインポートしているため、一意な値がある列を選択する必要があります。"
+  text_rmi_specify_unique_field_for_update: "存在するチケットを更新する場合、ユニークフィールドを選択する必要があります。"
+  text_rmi_specify_unique_field_for_column: "「%{column}」という他のチケットと関連する列があるため、ユニークフィールドを選択する必要があります。"
