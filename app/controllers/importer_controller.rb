@@ -49,7 +49,6 @@ class ImporterController < ApplicationController
     @samples = []
     
     CSV.new(iip.csv_data, {:headers=>true,
-                           :converters => :all,
                            :encoding=>iip.encoding,
                            :quote_char=>iip.quote_char,
                            :col_sep=>iip.col_sep}).each do |row|
@@ -226,7 +225,6 @@ class ImporterController < ApplicationController
     end
 
     CSV.new(iip.csv_data, {:headers=>true,
-                           :converters => :all,
                            :encoding=>iip.encoding,
                            :quote_char=>iip.quote_char,
                            :col_sep=>iip.col_sep}).each do |row|
@@ -255,7 +253,7 @@ class ImporterController < ApplicationController
           category.save
         end
         assigned_to = row[attrs_map["assigned_to"]] != nil ? user_for_login!(row[attrs_map["assigned_to"]]) : nil
-        fixed_version_name = row[attrs_map["fixed_version"]]
+        fixed_version_name = row[attrs_map["fixed_version"]].blank? ? nil : row[attrs_map["fixed_version"]]
         fixed_version_id = fixed_version_name ? version_id_for_name!(project,fixed_version_name,add_versions) : nil
         watchers = row[attrs_map["watchers"]]
         # new issue or find exists one
@@ -343,8 +341,8 @@ class ImporterController < ApplicationController
       # optional attributes
       issue.description = row[attrs_map["description"]] || issue.description
       issue.category_id = category != nil ? category.id : issue.category_id
-      issue.start_date = row[attrs_map["start_date"]] || issue.start_date
-      issue.due_date = row[attrs_map["due_date"]] || issue.due_date
+      issue.start_date = row[attrs_map["start_date"]].blank? ? nil : Date.parse(row[attrs_map["start_date"]])
+      issue.due_date = row[attrs_map["due_date"]].blank? ? nil : Date.parse(row[attrs_map["due_date"]])
       issue.assigned_to_id = assigned_to != nil ? assigned_to.id : issue.assigned_to_id
       issue.fixed_version_id = fixed_version_id != nil ? fixed_version_id : issue.fixed_version_id
       issue.done_ratio = row[attrs_map["done_ratio"]] || issue.done_ratio
