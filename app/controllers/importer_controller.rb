@@ -426,7 +426,7 @@ class ImporterController < ApplicationController
         @failed_issues[@failed_count] = row
         flash_message(:warning, "The following data-validation errors occurred on issue #{@failed_count} in the list below")
         issue.errors.each do |attr, error_message|
-          flash_message(:warning, "&nbsp;&nbsp;"+error_message)
+          flash_message(:warning, "&nbsp;&nbsp;#{error_message}")
         end
       else
         if unique_field
