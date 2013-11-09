@@ -373,7 +373,7 @@ class ImporterController < ApplicationController
       # custom fields
       custom_failed_count = 0
       issue.custom_field_values = issue.available_custom_fields.inject({}) do |h, cf|
-        if value = row[attrs_map[cf.name]]
+        if value = row[attrs_map[cf.name]].blank? ? nil : row[attrs_map[cf.name]]
           begin
             if cf.field_format == 'user'
               value = user_id_for_login!(value).to_s
