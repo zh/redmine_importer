@@ -108,7 +108,7 @@ class ImporterController < ApplicationController
     if issues.size > 1
       @failed_count += 1
       @failed_issues[@failed_count] = row_data
-      flash_message(:warning, "Unique field #{unique_attr} with value '#{attr_value}' in issue #{@failed_count} has duplicate record")
+      @messages << "Warning: Unique field #{unique_attr} with value '#{attr_value}' in issue #{@failed_count} has duplicate record"
       raise MultipleIssuesForUniqueValue, "Unique field #{unique_attr} with value '#{attr_value}' has duplicate record"
       else
       if issues.size == 0
@@ -166,6 +166,7 @@ class ImporterController < ApplicationController
     @skip_count = 0
     @failed_count = 0
     @failed_issues = Hash.new
+	@messages = Array.new
     @affect_projects_issues = Hash.new
     # This is a cache of previously inserted issues indexed by the value
     # the user provided in the unique column
@@ -265,7 +266,7 @@ class ImporterController < ApplicationController
       rescue ActiveRecord::RecordNotFound
         @failed_count += 1
         @failed_issues[@failed_count] = row
-        flash_message(:warning, "When adding issue #{@failed_count} below, the #{@unfound_class} #{@unfound_key} was not found")
+        @messages << "Warning: When adding issue #{@failed_count} below, the #{@unfound_class} #{@unfound_key} was not found"
         next
       end
 
@@ -314,14 +315,14 @@ class ImporterController < ApplicationController
           else
             @failed_count += 1
             @failed_issues[@failed_count] = row
-            flash_message(:warning, "Could not update issue #{@failed_count} below, no match for the value #{row[unique_field]} were found")
+            @messages << "Warning: Could not update issue #{@failed_count} below, no match for the value #{row[unique_field]} were found"
             next
           end
           
         rescue MultipleIssuesForUniqueValue
           @failed_count += 1
           @failed_issues[@failed_count] = row
-          flash_message(:warning, "Could not update issue #{@failed_count} below, multiple matches for the value #{row[unique_field]} were found")
+          @messages << "Warning: Could not update issue #{@failed_count} below, multiple matches for the value #{row[unique_field]} were found"
           next
         end
       end
@@ -360,13 +361,13 @@ class ImporterController < ApplicationController
         else
           @failed_count += 1
           @failed_issues[@failed_count] = row
-          flash_message(:warning, "When setting the parent for issue #{@failed_count} below, no matches for the value #{parent_value} were found")
+          @messages << "Warning: When setting the parent for issue #{@failed_count} below, no matches for the value #{parent_value} were found"
           next
         end
       rescue MultipleIssuesForUniqueValue
         @failed_count += 1
         @failed_issues[@failed_count] = row
-        flash_message(:warning, "When setting the parent for issue #{@failed_count} below, multiple matches for the value #{parent_value} were found")
+        @messages << "Warning: When setting the parent for issue #{@failed_count} below, multiple matches for the value #{parent_value} were found"
         next
       end
 
@@ -389,7 +390,7 @@ class ImporterController < ApplicationController
               @failed_count += 1
               @failed_issues[@failed_count] = row
             end
-            flash_message(:warning, "When trying to set custom field #{cf.name} on issue #{@failed_count} below, value #{value} was invalid")
+            @messages << "Warning: When trying to set custom field #{cf.name} on issue #{@failed_count} below, value #{value} was invalid"
           end
         end
         h
@@ -415,7 +416,7 @@ class ImporterController < ApplicationController
               @failed_issues[@failed_count] = row
             end
             watcher_failed_count += 1
-            flash_message(:warning, "When trying to add watchers on issue #{@failed_count} below, User #{watcher} was not found")
+            @messages << "Warning: When trying to add watchers on issue #{@failed_count} below, User #{watcher} was not found"
           end
         end
       end
@@ -424,9 +425,9 @@ class ImporterController < ApplicationController
       unless issue.save
         @failed_count += 1
         @failed_issues[@failed_count] = row
-        flash_message(:warning, "The following data-validation errors occurred on issue #{@failed_count} in the list below")
+        @messages << "Warning: The following data-validation errors occurred on issue #{@failed_count} in the list below"
         issue.errors.each do |attr, error_message|
-          flash_message(:warning, "&nbsp;&nbsp;#{error_message}")
+          @messages << "Error: #{attr} #{error_message}"
         end
       else
         if unique_field

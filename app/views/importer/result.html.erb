@@ -8,28 +8,38 @@
 <% @affect_projects_issues.each do |project, count|%>
 <label class="tabular2"><%= project %>:</label><label class="tabular2"><%= l(:label_result_issues, count) %></label><br/>
 <% end %></p>
-<hr/>
 
-<% if @failed_count > 0 %>
-<%= l(:label_result_failed, @failed_count) %>
-<table class="list">
-    <thead><tr>
-    	<th>#</th>
-        <% @headers.each do |column| %>
-          <th><%= column.unpack('U*').pack('U*')  %></th>
-        <% end %>
-	</tr></thead>
-	<tbody>
-	<% @failed_issues.each do |id, issue| -%>
-	<tr class="<%= cycle("odd", "even") %>">
-		<td><%= id %></td>
-	    <% issue.each do |column| %>
-      <%- data = column[1] -%>
-      <%- data = data.unpack('U*').pack('U*') if data.is_a?(String) -%>
-        <%= content_tag 'td', data %>
-      <% end %>
-	</tr>
+<% if not @messages.empty? %>
+	<hr/>
+	<h3><%= l(:label_result_messages) %></h3>
+	<ul>
+	<% @messages.each do |m| %>
+		<li><%= m %></li>
 	<% end %>
-	</tbody>
-</table>
+	</ul>
+<% end %>
+
+<hr/>
+<% if @failed_count > 0 %>
+	<h3><%= l(:label_result_failed, @failed_count) %></h3>
+	<table class="list">
+		<thead><tr>
+			<th>#</th>
+			<% @headers.each do |column| %>
+			<th><%= column.unpack('U*').pack('U*')  %></th>
+			<% end %>
+		</tr></thead>
+		<tbody>
+		<% @failed_issues.each do |id, issue| -%>
+		<tr class="<%= cycle("odd", "even") %>">
+			<td><%= id %></td>
+			<% issue.each do |column| %>
+		<%- data = column[1] -%>
+		<%- data = data.unpack('U*').pack('U*') if data.is_a?(String) -%>
+			<%= content_tag 'td', data %>
+		<% end %>
+		</tr>
+		<% end %>
+		</tbody>
+	</table>
 <% end %>
