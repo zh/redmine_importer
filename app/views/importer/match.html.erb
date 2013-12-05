@@ -47,6 +47,7 @@
     <label><%= check_box_tag "send_emails", true, true %> <%= l(:label_importer_send_emails) %> </label><br/>
     <label><%= check_box_tag "add_categories", true, true %> <%= l(:label_importer_add_categories) %> </label><br/>		
     <label><%= check_box_tag "add_versions", true, true %> <%= l(:label_importer_add_versions) %> </label><br/>		
+    <label><%= check_box_tag "use_anonymous", true, true %> <%= l(:label_importer_use_anonymous) %> </label><br/>		
 		<label><%= check_box_tag "update_issue", true, false %> <%= l(:label_update_issue) %>
 		</label><br/>
 		<%= yield :update_issue_javascript %>

@@ -125,12 +125,16 @@ class ImporterController < ApplicationController
       if !@user_by_login.has_key?(login)
         @user_by_login[login] = User.find_by_login!(login)
       end
-      @user_by_login[login]
     rescue ActiveRecord::RecordNotFound
-      @unfound_class = "User"
-      @unfound_key = login
-      raise
+      if params[:use_anonymous]
+        @user_by_login[login] = User.anonymous()
+      else
+        @unfound_class = "User"
+        @unfound_key = login
+        raise
+      end
     end
+    @user_by_login[login]
   end
   def user_id_for_login!(login)
     user = user_for_login!(login)
