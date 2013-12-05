@@ -27,7 +27,8 @@ en:
   label_result_notice: "%{handle_count} issues processed.  %{success_count} issues successfully imported."
   label_result_projects: "Affected projects:"
   label_result_issues: "%{count} issues"
-  label_result_failed: "Failed %{count} rows:"
+  label_result_failed: "Failed rows (%{count})"
+  label_result_messages: "Messages"
   
   option_ignore: "Ignore"
   
