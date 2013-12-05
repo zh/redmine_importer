@@ -16,6 +16,7 @@ en:
   label_importer_send_emails: "Send notification emails"
   label_importer_add_categories: "Auto-add categories"
   label_importer_add_versions: "Auto-add target versions"
+  label_importer_use_anonymous: "Substitute unknown users with the Anonymous user"
   label_update_issue: "Update existing issues"
   label_journal_field: "Select column to use as note:"
   label_unique_field: "Select unique-valued column (required for updating existing issues or importing relations):"
