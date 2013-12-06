@@ -18,6 +18,7 @@ ja:
   label_importer_send_emails: "メールを送信する"
   label_importer_add_categories: "新しいカテゴリを自動的に追加"
   label_importer_add_versions: "新しい対象バージョンを自動的に追加"
+  label_importer_use_anonymous: "未登録のユーザーは匿名ユーザーに置き換える"
   label_unique_field: "ユニークフィールドを選択(存在するチケットを更新する場合や、関連するチケットをインポートする場合に必須):"
   label_update_other_project: "他のプロジェクトのチケットでも更新"
   label_ignore_non_exist: "チケットが存在しない場合は無視"
@@ -27,7 +28,8 @@ ja:
   label_result_notice: "%{handle_count} 行が処理されました。%{success_count} 行が正しく追加されました。"
   label_result_projects: "対象となったプロジェクト:"
   label_result_issues: "%{count} 行"
-  label_result_failed: "%{count} 行が失敗:"
+  label_result_failed: "失敗した行数: %{count}"
+  label_result_messages: "メッセージ"
 
   option_ignore: "無視"
 
