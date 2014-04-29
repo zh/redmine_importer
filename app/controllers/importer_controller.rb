@@ -48,22 +48,61 @@ class ImporterController < ApplicationController
     i = 0
     @samples = []
     
-    CSV.new(iip.csv_data, {:headers=>true,
-                           :encoding=>iip.encoding,
-                           :quote_char=>iip.quote_char,
-                           :col_sep=>iip.col_sep}).each do |row|
-      @samples[i] = row
-     
-      i += 1
-      if i >= sample_count
-        break
+    begin
+      if iip.csv_data.lines.to_a.size < 2
+        flash[:error] = 'No data line in your CSV, check the encoding of the file<br/><br/>Header :<br/>'.html_safe +
+          iip.csv_data
+
+        redirect_to importer_index_path(:project_id => @project)
+
+        return
       end
-    end # do
-    
+
+      CSV.new(iip.csv_data, {:headers=>true,
+                            :encoding=>iip.encoding,
+                             :quote_char=>iip.quote_char,
+                             :col_sep=>iip.col_sep}).each do |row|
+        @samples[i] = row
+        i += 1
+        if i >= sample_count
+          break
+        end
+      end # do
+    rescue Exception => e
+      csv_data_lines = iip.csv_data.lines.to_a
+
+      flash[:error] = e.message +
+        '<br/><br/>Header :<br/>'.html_safe +
+        csv_data_lines[0] +
+        '<br/><br/>Error on line :<br/>'.html_safe +
+        csv_data_lines[@samples.size + 1]
+
+      redirect_to importer_index_path(:project_id => @project)
+
+      return
+    end
+
     if @samples.size > 0
       @headers = @samples[0].headers
     end
     
+    missing_header_columns = ''
+    @headers.each_with_index{|h, i|
+      if h.nil?
+        missing_header_columns += " #{i+1}"
+      end
+    }
+
+    if missing_header_columns.present?
+      flash[:error] = 'Column header missing : ' + missing_header_columns + " / #{@headers.size}" +
+        '<br/><br/>Header :<br/>'.html_safe +
+        iip.csv_data.lines.to_a[0]
+
+      redirect_to importer_index_path(:project_id => @project)
+
+      return
+    end
+
     # fields
     @attrs = Array.new
     ISSUE_ATTRS.each do |attr|
@@ -170,7 +209,7 @@ class ImporterController < ApplicationController
     @skip_count = 0
     @failed_count = 0
     @failed_issues = Hash.new
-	@messages = Array.new
+    @messages = Array.new
     @affect_projects_issues = Hash.new
     # This is a cache of previously inserted issues indexed by the value
     # the user provided in the unique column
