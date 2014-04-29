@@ -49,7 +49,7 @@ class ImporterController < ApplicationController
     @samples = []
     
     begin
-      if iip.csv_data.lines.to_a.size < 2
+      if iip.csv_data.lines.to_a.size <= 1
         flash[:error] = 'No data line in your CSV, check the encoding of the file<br/><br/>Header :<br/>'.html_safe +
           iip.csv_data
 
@@ -71,11 +71,16 @@ class ImporterController < ApplicationController
     rescue Exception => e
       csv_data_lines = iip.csv_data.lines.to_a
 
-      flash[:error] = e.message +
+      error_message = e.message +
         '<br/><br/>Header :<br/>'.html_safe +
-        csv_data_lines[0] +
-        '<br/><br/>Error on line :<br/>'.html_safe +
-        csv_data_lines[@samples.size + 1]
+        csv_data_lines[0]
+
+      if csv_data_lines.size > 0
+        error_message += '<br/><br/>Error on header or line :<br/>'.html_safe +
+          csv_data_lines[@samples.size + 1]
+      end
+
+      flash[:error] = error_message
 
       redirect_to importer_index_path(:project_id => @project)
 
