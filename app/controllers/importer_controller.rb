@@ -388,7 +388,9 @@ class ImporterController < ApplicationController
       issue.subject = row[attrs_map["subject"]] || issue.subject
       
       # optional attributes
-      issue.description = row[attrs_map["description"]] || issue.description
+      description = row[attrs_map["description"]]
+      issue.description = description ?
+          description.gsub(/\r\n?|\\n|<br\s*\/?>/, "\n") : issue.description
       issue.category_id = category != nil ? category.id : issue.category_id
       issue.start_date = row[attrs_map["start_date"]].blank? ? nil : Date.parse(row[attrs_map["start_date"]])
       issue.due_date = row[attrs_map["due_date"]].blank? ? nil : Date.parse(row[attrs_map["due_date"]])
@@ -433,6 +435,8 @@ class ImporterController < ApplicationController
               value = value.to_date.to_s(:db)
             elsif cf.field_format == 'list'
               value = value.split(',').map(&:strip)
+            elsif cf.field_format == 'text'
+              value = value.gsub(/\r\n?|\\n|<br\s*\/?>/, "\n")
             end
             h[cf.id] = value
           rescue
