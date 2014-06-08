@@ -268,7 +268,7 @@ class ImporterController < ApplicationController
         end
       end
     end
-    if unique_error && unique_attr == nil
+    if unique_error && unique_attr.blank?
       flash[:error] = unique_error
       return
     end
@@ -388,7 +388,9 @@ class ImporterController < ApplicationController
       issue.subject = row[attrs_map["subject"]] || issue.subject
       
       # optional attributes
-      issue.description = row[attrs_map["description"]] || issue.description
+      description = row[attrs_map["description"]]
+      issue.description = description ?
+          description.gsub(/\r\n?|\\n|<br\s*\/?>/, "\n") : issue.description
       issue.category_id = category != nil ? category.id : issue.category_id
       issue.start_date = row[attrs_map["start_date"]].blank? ? nil : Date.parse(row[attrs_map["start_date"]])
       issue.due_date = row[attrs_map["due_date"]].blank? ? nil : Date.parse(row[attrs_map["due_date"]])
@@ -400,7 +402,7 @@ class ImporterController < ApplicationController
       # parent issues
       begin
         parent_value = row[attrs_map["parent_issue"]]
-        if parent_value && (parent_value.length > 0)
+        if parent_value.present?
           issue.parent_issue_id = issue_for_unique_attr(unique_attr,parent_value,row).id
         end
       rescue NoIssueForUniqueValue
@@ -422,7 +424,8 @@ class ImporterController < ApplicationController
       # custom fields
       custom_failed_count = 0
       issue.custom_field_values = issue.available_custom_fields.inject({}) do |h, cf|
-        if value = row[attrs_map[cf.name]].blank? ? nil : row[attrs_map[cf.name]]
+        value = row[attrs_map[cf.name]]
+        if value.present?
           begin
             if cf.field_format == 'user'
               value = user_id_for_login!(value).to_s
@@ -430,6 +433,10 @@ class ImporterController < ApplicationController
               value = version_id_for_name!(project,value,add_versions).to_s
             elsif cf.field_format == 'date'
               value = value.to_date.to_s(:db)
+            elsif cf.field_format == 'list'
+              value = value.split(',').map(&:strip)
+            elsif cf.field_format == 'text'
+              value = value.gsub(/\r\n?|\\n|<br\s*\/?>/, "\n")
             end
             h[cf.id] = value
           rescue
