@@ -433,7 +433,7 @@ class ImporterController < ApplicationController
               value = version_id_for_name!(project,value,add_versions).to_s
             elsif cf.field_format == 'date'
               value = value.to_date.to_s(:db)
-            elsif cf.field_format == 'list'
+            elsif cf.multiple? && cf.field_format == 'list'
               value = value.split(',').map(&:strip)
             elsif cf.field_format == 'text'
               value = value.gsub(/\r\n?|\\n|<br\s*\/?>/, "\n")
