@@ -35,6 +35,14 @@ class ImporterController < ApplicationController
     iip.col_sep = params[:splitter]
     iip.encoding = params[:encoding]
     iip.created = Time.new
+
+    unless params[:file]
+      flash[:error] = 'You must provide a file !'
+
+      redirect_to importer_index_path(:project_id => @project)
+      return
+    end
+
     iip.csv_data = params[:file].read
     iip.save
     
