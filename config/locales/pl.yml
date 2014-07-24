@@ -1,0 +1,43 @@
+pl:
+  label_import: "Import"
+  label_issue_importer: "Importowanie Zagadnień"
+  label_upload_notice: "Wybierz plik CSV do wczytania. Wczytywany plik musi posiadać nagłówki. Maksymalna wielkość pliku to 4 MB."
+  label_upload_format: "Ustawienia formatu pliku"
+  label_upload_encoding: "Sposób kodowania znaków:"
+  label_upload_splitter: "Znak separatora pól:"
+  label_upload_wrapper: "Znak separatora tekstów:"
+
+  label_load_rules: "Wczytanie zapisanych reguł"
+  label_toplines: "Kilka pierwszych wierszy w  %{value}："
+  label_match_columns: "Dopasowanie kolumn"
+  label_match_select: "Wybierz pole, które zostaną przypisane wybranej kolumnie:"
+  label_import_rule: "Reguły wczytywania pliku"
+  label_default_tracker: "Domyślne zagadnienie:"
+  label_importer_send_emails: "Wysłanie powiadomień emailem"
+  label_importer_add_categories: "Automatyczne dodawanie kategorii"
+  label_importer_add_versions: "Automatyczne dodawanie wersji"
+  label_importer_use_anonymous: "Zamiena nieznanych uczestników projektu na Anonimowy użytkownik"
+  label_update_issue: "Aktualizacja istniejących zagadnień"
+  label_journal_field: "Wybierz kolumnę, która zostanie użyta jako Notatka w dzienniku:"
+  label_unique_field: "Wybierz kolumnę z unikalnymi wartościami (wymagane do aktualizacji zagadnień i importu zależności):"
+  label_update_other_project: "Pozwól na aktualizację zagadnień z innych projektów"
+  label_ignore_non_exist: "Ignoruj zagadnienia, które nie istnieją"
+  label_rule_name: "Podaj nazwę reguły"
+
+  label_import_result: "Wyniki importu zagadnień"
+  label_result_notice: "%{handle_count} przetworzonych zaganień.  %{success_count} zaimportowanych zagadnień."
+  label_result_projects: "Projekty w których dodano/zmieniono zagadnienia:"
+  label_result_issues: "%{count} zagadnień"
+  label_result_failed: "Liczba nie udanych wstawień wierszy (%{count})"
+  label_result_messages: "Wiadomości"
+
+  option_ignore: "Ignoruj"
+
+  button_upload: "Wczytaj plik"
+  button_submit: "Wyślij"
+  button_save_rules_and_submit: "Save match rules and submit"
+
+  text_rmi_specify_unique_field_for_update: "Unique field must be specified because Update existing issues is on"
+  text_rmi_specify_unique_field_for_column: "Unique field must be specified because the column %{column} needs to refer to other tasks"
+
+  message_no_file: "Wybierz plik, który chcesz wczytać"
