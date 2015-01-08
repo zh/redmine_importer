@@ -7,8 +7,8 @@ end
 class NoIssueForUniqueValue < Exception
 end
 
-class Journal < ActiveRecord::Base
-  def empty?(*args)
+Journal.class_exec do
+  def empty?
     (details.empty? && notes.blank?)
   end
 end
