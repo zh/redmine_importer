@@ -1,0 +1,40 @@
+﻿zh-TW:
+  label_import: "匯入"
+  label_issue_importer: "問題列表匯入工具"
+  label_upload_notice: "請選擇需要上傳的問題清單CSV文件。檔必須具有標題行。"
+  label_upload_format: "檔案格式設置"
+  label_upload_encoding: "編碼:"
+  label_upload_splitter: "欄位分隔符號:"
+  label_upload_wrapper: "欄位包裹符:"
+  
+  label_load_rules: "載入已保存的匹配規則"
+  label_toplines: "參考文件 %{value} 的頭幾行:"
+  label_match_columns: "欄位配對"
+  label_match_select: "選擇對應的欄位"
+  label_import_rule: "匯入規則"
+  label_default_tracker: "默認跟蹤:"
+  label_importer_send_emails: "發送提醒郵件"
+  label_importer_add_categories: "自動新增問題類別"
+  label_importer_add_versions: "自動新增目標版本"
+  label_update_issue: "更新已存在的問題"
+  label_journal_field: "選擇用於日誌的欄位:"
+  label_unique_field: "選擇用於標識問題的唯一欄位:"
+  label_update_other_project: "允許更新其他項目的問題"
+  label_ignore_non_exist: "忽略不存在的問題"
+  label_rule_name: "輸入規則名稱"
+ 
+  label_import_result: "匯入結果"
+  label_result_notice: "處理了%{handle_count}個問題。%{success_count}個問題被成功匯入。"
+  label_result_projects: "受影響的項目:"
+  label_result_issues: "%{count} 個問題"
+  label_result_failed: "%{count} 條失敗的行:"
+  
+  option_ignore: "忽略"
+  
+  button_upload: "上傳文件"
+  button_submit: "提交"
+  button_save_rules_and_submit: "存儲匹配規則後提交"
+
+  text_rmi_specify_unique_field_for_update: "更新現有問題時，必須填寫必填欄位內容！"
+  text_rmi_specify_unique_field_for_column: "【%{column}】列必須填寫內容，或在匯入時，將【%{column}】列設置為忽略！" 
+
