@@ -3,6 +3,8 @@ class ImportInProgress < ActiveRecord::Base
   unloadable
   belongs_to :user
   belongs_to :project
+
+  attr_accessible :user_id, :col_sep, :encoding, :created, :csv_data
   
   before_save :encode_csv_data
   
