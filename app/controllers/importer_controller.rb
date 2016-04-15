@@ -30,7 +30,7 @@ class ImporterController < ApplicationController
     # Delete existing iip to ensure there can't be two iips for a user
     ImportInProgress.delete_all(["user_id = ?",User.current.id])
     # save import-in-progress data
-    iip = ImportInProgress.find_or_create_by( :user_id => User.current.id)
+    iip = ImportInProgress.where( :user_id => User.current.id).first_or_create
     iip.quote_char = params[:wrapper]
     iip.col_sep = params[:splitter]
     iip.encoding = params[:encoding]
@@ -42,7 +42,6 @@ class ImporterController < ApplicationController
       redirect_to importer_index_path(:project_id => @project)
       return
     end
-
     iip.csv_data = params[:file].read
     iip.save
     
@@ -139,7 +138,7 @@ class ImporterController < ApplicationController
     end
 
     if unique_attr == "id"
-      issues = [Issue.find_by(:id => attr_value)]
+      issues = [Issue.where(:id => attr_value)]
     else
       # Use IssueQuery class Redmine >= 2.3.0
       begin
@@ -175,7 +174,7 @@ class ImporterController < ApplicationController
   def user_for_login!(login)
     begin
       if !@user_by_login.has_key?(login)
-        @user_by_login[login] = User.find_by!(:login => login)
+        @user_by_login[login] = User.where(:login => login).first
       end
     rescue ActiveRecord::RecordNotFound
       if params[:use_anonymous]
@@ -200,7 +199,7 @@ class ImporterController < ApplicationController
   # will create a new version and save it when it doesn't exist yet.
   def version_id_for_name!(project,name,add_versions)
     if !@version_id_by_name.has_key?(name)
-      version = Version.find_by(:project_id => project.id, :name => name)
+      version = Version.where(:project_id => project.id, :name => name).first
       if !version
         if name && (name.length > 0) && add_versions
           version = project.versions.build(:name=>name)
@@ -233,7 +232,7 @@ class ImporterController < ApplicationController
     @version_id_by_name = Hash.new
     
     # Retrieve saved import data
-    iip = ImportInProgress.find_by(:user_id => User.current.id)
+    iip = ImportInProgress.where(:user_id => User.current.id).first
     if iip == nil
       flash[:error] = "No import is currently in progress"
       return
@@ -280,13 +279,12 @@ class ImporterController < ApplicationController
       flash[:error] = unique_error
       return
     end
-
     CSV.new(iip.csv_data, {:headers=>true,
                            :encoding=>iip.encoding,
                            :quote_char=>iip.quote_char,
                            :col_sep=>iip.col_sep}).each do |row|
 
-      project = Project.find_by(:name => row[attrs_map["project"]])
+      project = Project.where(:name => row[attrs_map["project"]]).first
       if !project
         project = @project
       end
@@ -299,12 +297,12 @@ class ImporterController < ApplicationController
           row[k] = v
         end
 
-        tracker = Tracker.find_by( :name => row[attrs_map["tracker"]])
-        status = IssueStatus.find_by( :name => row[attrs_map["status"]])
+        tracker = Tracker.where( :name => row[attrs_map["tracker"]]).first
+        status = IssueStatus.where( :name => row[attrs_map["status"]]).first
         author = attrs_map["author"] ? user_for_login!(row[attrs_map["author"]]) : User.current
-        priority = Enumeration.find_by( :name => row[attrs_map["priority"]])
+        priority = Enumeration.where( :name => row[attrs_map["priority"]]).first
         category_name = row[attrs_map["category"]]
-        category = IssueCategory.find_by(:project_id => project.id, :name => category_name)
+        category = IssueCategory.where(:project_id => project.id, :name => category_name).first
         if (!category) && category_name && category_name.length > 0 && add_categories
           category = project.issue_categories.build(:name => category_name)
           category.save
@@ -316,9 +314,10 @@ class ImporterController < ApplicationController
         # new issue or find exists one
         issue = Issue.new
         journal = nil
-        issue.project_id = project != nil ? project.id : @project.id
-        issue.tracker_id = tracker != nil ? tracker.id : default_tracker
+        issue.project_id = project != nil ? project.id : @project.id       
+        issue.tracker_id = tracker !=nil  ? tracker.id : default_tracker
         issue.author_id = author != nil ? author.id : User.current.id
+      
       rescue ActiveRecord::RecordNotFound
         @failed_count += 1
         @failed_issues[@failed_count] = row
@@ -385,7 +384,7 @@ class ImporterController < ApplicationController
     
       # project affect
       if project == nil
-        project = Project.find_by(:id => issue.project_id)
+        project = Project.where(:id => issue.project_id)
       end
       @affect_projects_issues.has_key?(project.name) ?
         @affect_projects_issues[project.name] += 1 : @affect_projects_issues[project.name] = 1
@@ -484,8 +483,8 @@ class ImporterController < ApplicationController
         end
       end
       next if watcher_failed_count > 0
-
-      unless issue.save
+   
+      unless issue.save()
         @failed_count += 1
         @failed_issues[@failed_count] = row
         @messages << "Warning: The following data-validation errors occurred on issue #{@failed_count} in the list below"
