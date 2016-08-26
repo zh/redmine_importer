@@ -138,7 +138,7 @@ class ImporterController < ApplicationController
     end
 
     if unique_attr == "id"
-      issues = [Issue.where(:id => attr_value)]
+      issues = [Issue.where(:id => attr_value).first]
     else
       # Use IssueQuery class Redmine >= 2.3.0
       begin
