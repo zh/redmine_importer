@@ -138,7 +138,7 @@ class ImporterController < ApplicationController
     end
 
     if unique_attr == "id"
-      issues = [Issue.where(:id => attr_value)]
+      issues = [Issue.where(:id => attr_value).first]
     else
       # Use IssueQuery class Redmine >= 2.3.0
       begin
@@ -249,6 +249,11 @@ class ImporterController < ApplicationController
     unique_field = params[:unique_field].empty? ? nil : params[:unique_field]
     journal_field = params[:journal_field]
     update_other_project = params[:update_other_project]
+    # Authorise update of closed issues optionnaly
+    if update_issue
+      update_closed_issues = params[:update_closed_issues]
+    end
+
     ignore_non_exist = params[:ignore_non_exist]
     fields_map = {}
     params[:fields_map].each { |k, v| fields_map[k.unpack('U*').pack('U*')] = v }
@@ -314,10 +319,9 @@ class ImporterController < ApplicationController
         # new issue or find exists one
         issue = Issue.new
         journal = nil
-        issue.project_id = project != nil ? project.id : @project.id       
-        issue.tracker_id = tracker !=nil  ? tracker.id : default_tracker
+        issue.project_id = project != nil ? project.id : @project.id
+        issue.tracker_id = tracker != nil ? tracker.id : default_tracker
         issue.author_id = author != nil ? author.id : User.current.id
-      
       rescue ActiveRecord::RecordNotFound
         @failed_count += 1
         @failed_issues[@failed_count] = row
@@ -349,7 +353,8 @@ class ImporterController < ApplicationController
           end
           
           # ignore closed issue except reopen
-          if issue.status.is_closed?
+          # Authorise update of closed issues optionnaly
+          if !update_closed_issues && issue.status.is_closed?
             if status == nil || status.is_closed?
               @skip_count += 1
               next
@@ -483,7 +488,7 @@ class ImporterController < ApplicationController
         end
       end
       next if watcher_failed_count > 0
-   
+
       unless issue.save()
         @failed_count += 1
         @failed_issues[@failed_count] = row
@@ -533,7 +538,7 @@ class ImporterController < ApplicationController
         if journal
           journal
         end
-        
+
         @handle_count += 1
 
       end

@@ -6,9 +6,10 @@
 <script type='text/javascript'>
   $(function() {
     $('#update_issue').change(function() {
-      $('#journal_field').attr('disabled', !this.checked) 
-      $('#update_other_project').attr('disabled', !this.checked) 
-      $('#ignore_non_exist').attr('disabled', !this.checked) 
+      $('#journal_field').attr('disabled', !this.checked);
+      $('#update_other_project').attr('disabled', !this.checked);
+      $('#update_closed_issues').attr('disabled', !this.checked);
+      $('#ignore_non_exist').attr('disabled', !this.checked);
     }).change();
   })
 </script>
@@ -18,7 +19,7 @@
 <!--
 <fieldset class="box"><legend><%= l(:label_load_rules) %></legend>
 	<% @headers.each do |column| %>
-		 
+
 	<% end %>
 </fieldset>
 -->
@@ -31,35 +32,40 @@
 	        @attrs.each do |k,v| if v.to_s.casecmp(column.to_s.sub(" ") {|sp| "_" }) == 0 or k.to_s.casecmp(column.to_s) == 0 then matched = v end end
 	        %>
 		 <label class="tabular"><%= column.unpack('U*').pack('U*') %>:
-       <%= select_tag "fields_map[#{column.unpack('U*').pack('U*')}]", raw("<option value=\"\">#{l(:option_ignore)}</option>") + 
+       <%= select_tag "fields_map[#{column.unpack('U*').pack('U*')}]", raw("<option value=\"\">#{l(:option_ignore)}</option>") +
 				options_for_select( @attrs, matched ) %></label>
 	<% end %>
 	</fieldset>
-	
+
 	<fieldset class="box"><legend><%= l(:label_import_rule) %></legend>
 		<label><%= l(:label_default_tracker) %>
 		<%= select_tag "default_tracker", options_from_collection_for_select(@project.trackers, 'id', 'name') %></label><br/>
-		
+
 		<label><%= l(:label_unique_field) %>
 		<%= select_tag "unique_field", raw("<option value=\"\">#{l(:option_ignore)}</option>") +
       options_for_select(@headers.map{|header| header.unpack('U*').pack('U*')}) %></label><br/>
 
     <label><%= check_box_tag "send_emails", true, true %> <%= l(:label_importer_send_emails) %> </label><br/>
-    <label><%= check_box_tag "add_categories", true, true %> <%= l(:label_importer_add_categories) %> </label><br/>		
-    <label><%= check_box_tag "add_versions", true, true %> <%= l(:label_importer_add_versions) %> </label><br/>		
-    <label><%= check_box_tag "use_anonymous", true, true %> <%= l(:label_importer_use_anonymous) %> </label><br/>		
+    <label><%= check_box_tag "add_categories", true, true %> <%= l(:label_importer_add_categories) %> </label><br/>
+    <label><%= check_box_tag "add_versions", true, true %> <%= l(:label_importer_add_versions) %> </label><br/>
+    <label><%= check_box_tag "use_anonymous", true, true %> <%= l(:label_importer_use_anonymous) %> </label><br/>
 		<label><%= check_box_tag "update_issue", true, false %> <%= l(:label_update_issue) %>
 		</label><br/>
 		<%= yield :update_issue_javascript %>
 		&nbsp;&nbsp;&nbsp;&nbsp;<label><%= l(:label_journal_field) %>
       <%= select_tag "journal_field", raw("<option value=\"\">#{l(:option_ignore)}</option>") + options_for_select(@headers.map{|header| header.unpack('U*').pack('U*')}), {:disabled => true} %></label><br/>
-		
+
 		&nbsp;&nbsp;&nbsp;&nbsp;<label><%= check_box_tag "update_other_project", true, false, {:disabled => true} %>
 		<%= l(:label_update_other_project) %></label><br/>
 
 		&nbsp;&nbsp;&nbsp;&nbsp;<label><%= check_box_tag "ignore_non_exist", true, false, {:disabled => true} %>
 		<%= l(:label_ignore_non_exist) %></label><br/>
-				
+
+<%
+		# Authorise update of closed issues optionnaly
+-%>
+		&nbsp;&nbsp;&nbsp;&nbsp;<label><%= check_box_tag "update_closed_issues", true, false, {:disabled => true} %>
+		Update closed issues</label><br/>
 	</fieldset>
 
 	<%= submit_tag l(:button_submit) %>
